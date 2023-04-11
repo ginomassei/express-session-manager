@@ -1,8 +1,8 @@
 import session from 'express-session';
-import { cookieDurationInHours } from './utils/cookie.utils';
-import { isSecureEnv } from './utils/env.utils';
+import { cookieDurationInHours } from '../utils/cookie.utils';
+import { isSecureEnv } from '../utils/env.utils';
 import { StatusCodes } from 'http-status-codes';
-import { AuthorizerFunction, ILogger } from './types/types';
+import { AuthorizerFunction, ILogger } from '../interfaces/interfaces';
 import { NextFunction, Response, Request } from 'express';
 
 export class SessionHandler {
