@@ -62,6 +62,10 @@ export class SessionHandler {
 	}
 
 	public set logger(logger: ILogger) {
+		// Check if the logger has the required methods.
+		if (!logger.info || !logger.error) {
+			throw new Error('Logger must have info and error methods');
+		}
 		this._logger = logger;
 	}
 }
