@@ -1,3 +1,3 @@
-export { SessionHandler } from './Session';
-export { AuthorizerFunction } from './types';
-export { SessionData } from 'express-session';
+export * from './SessionHandler';
+export * from './SessionExpress';
+export * from './types/types';

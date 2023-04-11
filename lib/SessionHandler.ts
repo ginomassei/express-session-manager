@@ -2,7 +2,7 @@ import session from 'express-session';
 import { cookieDurationInHours } from './utils/cookie.utils';
 import { isSecureEnv } from './utils/env.utils';
 import { StatusCodes } from 'http-status-codes';
-import { AuthorizerFunction, ILogger } from './types';
+import { AuthorizerFunction, ILogger } from './types/types';
 import { NextFunction, Response, Request } from 'express';
 
 export class SessionHandler {
