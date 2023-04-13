@@ -10,8 +10,9 @@
 		"strict": true /* Enable all strict type-checking options. */,
 		"skipLibCheck": true /* Skip type checking all .d.ts files. */,
 		"declarationDir": "./dist/types",
-		"typeRoots": ["./dist/types*"]
+//		"typeRoots": ["./dist/types*"],
+		"types": ["jest", "node"]
 	},
 	"include": ["lib"],
-	"exclude": ["node_modules", "test"]
+	"exclude": ["node_modules", "dist"]
 }
