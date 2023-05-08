@@ -6,19 +6,19 @@ El módulo está configurado según las buenas prácticas de seguridad sugeridas
 
 #### Instalación
 
-npm i express-session-manager
+npm i session-manager-express
 
 #### Uso
 
 ```typescript
-import { SessionManager } from 'express-session-manager';
+import { SessionHandler } form 'session-manager-express';
 
-app.use(SessionManager.create());
+app.use(SessionHandler.create());
 ```
 
 #### Puedes configurar tus propios "Authorizers"
 
-Los authorizers son funciones que se ejecutan en la función `SessionManager.validateSession` y que permiten validar si la sesión es válida o no. Por ejemplo, puedes crear un authorizer que valide si el usuario está activo o no.
+Los authorizers son funciones que se ejecutan en la función `SessionHandler.validateSession` y que permiten validar si la sesión es válida o no. Por ejemplo, puedes crear un authorizer que valide si el usuario está activo o no.
 
 ```typescript
 
@@ -31,7 +31,7 @@ const authorizers: Authorizer[] = [
 	}
 ];
 
-SessionManager.registerAuthorizers(authorizers);
+SessionHandler.registerAuthorizers(authorizers);
 ```
 
 Es importante que recuerdes que los authorizers se ejecutan en el orden en el que fueron registrados.
@@ -39,13 +39,13 @@ Es importante que recuerdes que los authorizers se ejecutan en el orden en el qu
 #### Puedes configurar tu logger personalizado
 
 ```typescript
-SessionManager.setLogger(logger);
+SessionHandler.setLogger(logger);
 ```
 
 #### Tienes que redefinir la interfaz `Session`
 
 ```typescript
-declare module 'express-session-manager' {
+declare module 'session-manager-express' {
 	interface Session {
 		user: User;
 	}
