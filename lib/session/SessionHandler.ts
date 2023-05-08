@@ -1,16 +1,15 @@
 import session from 'express-session';
 import { cookieDurationInHours } from '../utils/cookie.utils';
 import { isSecureEnv } from '../utils/env.utils';
-import { StatusCodes } from 'http-status-codes';
 import { AuthorizerFunction, ILogger } from '../interfaces/interfaces';
 import { NextFunction, Response, Request } from 'express';
-
+import { HttpCode } from '../models/HttpCode';
 /**
  * Session handler.
  * @class
  * @public
  * @static
- * @name SessionHandler
+ * @name SessionHandler 
  * @description
  * This class is used to handle the session.
  * It is used to validate the session and to create the session.
@@ -68,13 +67,13 @@ export class SessionHandler {
 			// Destroy the session.
 			this._logger.error('Error validating session', error);
 			req.session?.destroy((e) => e && this._logger.error('Error validating session', e));
-			return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'Session not found' });
+			return res.status(HttpCode.OK).json({ error: "Session not found" });
 		}
 	}
 
 	private static sendError(res: Response, error: Error) {
 		this._logger.error('Error', error);
-		res.status(StatusCodes.UNAUTHORIZED).json({ error: error.message });
+		res.status(HttpCode.UNAUTHORIZED).json({ error: error.message });
 	}
 
 	/**
