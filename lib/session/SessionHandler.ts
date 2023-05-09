@@ -1,15 +1,15 @@
-import session from 'express-session';
-import { cookieDurationInHours } from '../utils/cookie.utils';
-import { isSecureEnv } from '../utils/env.utils';
-import { AuthorizerFunction, ILogger } from '../interfaces/interfaces';
-import { NextFunction, Response, Request } from 'express';
-import { HttpCode } from '../models/HttpCode';
+import session from "express-session";
+import { cookieDurationInHours } from "../utils/cookie.utils";
+import { isSecureEnv } from "../utils/env.utils";
+import { AuthorizerFunction, ILogger } from "../interfaces/interfaces";
+import { NextFunction, Response, Request } from "express";
+import { HttpCode } from "../models/HttpCode";
 /**
  * Session handler.
  * @class
  * @public
  * @static
- * @name SessionHandler 
+ * @name SessionHandler
  * @description
  * This class is used to handle the session.
  * It is used to validate the session and to create the session.
@@ -24,8 +24,8 @@ export class SessionHandler {
 
 	public static create() {
 		return session({
-			name: 'session_cookie',
-			secret: process.env.SESSION_SECRET ?? 'secret',
+			name: "session_cookie",
+			secret: process.env.SESSION_SECRET ?? "secret",
 			resave: false,
 			saveUninitialized: false,
 			proxy: isSecureEnv(),
@@ -33,8 +33,8 @@ export class SessionHandler {
 				maxAge: this._cookieDurationInHours,
 				httpOnly: true,
 				secure: isSecureEnv(),
-				sameSite: 'strict',
-				domain: process.env.COOKIE_DOMAIN ?? 'localhost',
+				sameSite: "strict",
+				domain: process.env.COOKIE_DOMAIN ?? "localhost",
 			},
 		});
 	}
@@ -50,14 +50,14 @@ export class SessionHandler {
 			const { session } = req;
 
 			if (!session) {
-				this.sendError(res, new Error('Session not found'));
+				this.sendError(res, new Error("Session not found"));
 				return;
 			}
 
 			// Run authorizers. If any of them returns false, the session is invalid.
 			SessionHandler.authorizers.forEach((authorizer) => {
 				if (!authorizer(session)) {
-					this.sendError(res, new Error('Check authorizers'));
+					this.sendError(res, new Error("Check authorizers"));
 					return;
 				}
 			});
@@ -65,14 +65,14 @@ export class SessionHandler {
 			return next();
 		} catch (error: Error | any) {
 			// Destroy the session.
-			this._logger.error('Error validating session', error);
-			req.session?.destroy((e) => e && this._logger.error('Error validating session', e));
+			this._logger.error("Error validating session", error);
+			req.session?.destroy((e) => e && this._logger.error("Error validating session", e));
 			return res.status(HttpCode.OK).json({ error: "Session not found" });
 		}
 	}
 
 	private static sendError(res: Response, error: Error) {
-		this._logger.error('Error', error);
+		this._logger.error("Error", error);
 		res.status(HttpCode.UNAUTHORIZED).json({ error: error.message });
 	}
 
@@ -98,10 +98,10 @@ export class SessionHandler {
 	 * Set a custom logger.
 	 * @param logger
 	 */
-	public set logger(logger: ILogger) {
+	public setLogger(logger: ILogger) {
 		// Check if the logger has the required methods.
 		if (!logger.info || !logger.error) {
-			throw new Error('Logger must have info and error methods');
+			throw new Error("Logger must have info and error methods");
 		}
 		SessionHandler._logger = logger;
 	}
