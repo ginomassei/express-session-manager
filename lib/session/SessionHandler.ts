@@ -98,11 +98,11 @@ export class SessionHandler {
 	 * Set a custom logger.
 	 * @param logger
 	 */
-	public setLogger(logger: ILogger) {
+	public static setLogger(logger: ILogger) {
 		// Check if the logger has the required methods.
 		if (!logger.info || !logger.error) {
 			throw new Error("Logger must have info and error methods");
 		}
-		SessionHandler._logger = logger;
+		this._logger = logger;
 	}
 }
