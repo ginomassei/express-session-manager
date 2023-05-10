@@ -56,8 +56,9 @@ export class SessionHandler {
 
 			// Run authorizers. If any of them returns false, the session is invalid.
 			SessionHandler.authorizers.forEach((authorizer) => {
-				if (!authorizer(session)) {
-					SessionHandler.sendError(res, new Error("Check authorizers"));
+				const { valid, error } = authorizer(session);
+				if (!valid) {
+					SessionHandler.sendError(res, error ?? new Error("Session not valid"));
 					return;
 				}
 			});
@@ -65,14 +66,14 @@ export class SessionHandler {
 			return next();
 		} catch (error: Error | any) {
 			// Destroy the session.
-			SessionHandler._logger.error("Error validating session", error);
-			req.session?.destroy((e) => e && SessionHandler._logger.error("Error validating session", e));
+			SessionHandler._logger.error("Error validating session");
+			req.session?.destroy((e) => e && SessionHandler._logger.error("Error validating session"));
 			return res.status(HttpCode.OK).json({ error: "Session not found" });
 		}
 	}
 
 	private static sendError(res: Response, error: Error) {
-		SessionHandler._logger.error("Error", error);
+		SessionHandler._logger.error(error.message);
 		res.status(HttpCode.UNAUTHORIZED).json({ error: error.message });
 	}
 
