@@ -50,14 +50,14 @@ export class SessionHandler {
 			const { session } = req;
 
 			if (!session) {
-				this.sendError(res, new Error("Session not found"));
+				SessionHandler.sendError(res, new Error("Session not found"));
 				return;
 			}
 
 			// Run authorizers. If any of them returns false, the session is invalid.
 			SessionHandler.authorizers.forEach((authorizer) => {
 				if (!authorizer(session)) {
-					this.sendError(res, new Error("Check authorizers"));
+					SessionHandler.sendError(res, new Error("Check authorizers"));
 					return;
 				}
 			});
@@ -65,14 +65,14 @@ export class SessionHandler {
 			return next();
 		} catch (error: Error | any) {
 			// Destroy the session.
-			this._logger.error("Error validating session", error);
-			req.session?.destroy((e) => e && this._logger.error("Error validating session", e));
+			SessionHandler._logger.error("Error validating session", error);
+			req.session?.destroy((e) => e && SessionHandler._logger.error("Error validating session", e));
 			return res.status(HttpCode.OK).json({ error: "Session not found" });
 		}
 	}
 
 	private static sendError(res: Response, error: Error) {
-		this._logger.error("Error", error);
+		SessionHandler._logger.error("Error", error);
 		res.status(HttpCode.UNAUTHORIZED).json({ error: error.message });
 	}
 
@@ -103,6 +103,6 @@ export class SessionHandler {
 		if (!logger.info || !logger.error) {
 			throw new Error("Logger must have info and error methods");
 		}
-		this._logger = logger;
+		SessionHandler._logger = logger;
 	}
 }
